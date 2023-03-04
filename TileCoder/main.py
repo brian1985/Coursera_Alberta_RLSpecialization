@@ -4,6 +4,7 @@ For this example rather than build an environment I want to use openAI GYM packa
 
 """
 
+import pickle
 from TileCoder.tilingSutton import IHT, tiles
 import gymnasium as gym
 import numpy as np
@@ -236,6 +237,13 @@ if __name__ == "__main__":
                     action = agent.step(reward, state)
 
         env.close()
+
+        #  generate a new file each training.
+        import uuid
+        id = str(uuid.uuid1())[:8]
+        with open(f"TileCoder//trained_discrete_hillclimber_agent_{id}.pkl", 'wb') as f:
+            pickle.dump(agent, f)
+
         return agent
 
     print("begin training")
@@ -247,6 +255,8 @@ if __name__ == "__main__":
     state, _ = e.reset()
     reward = 0
 
+
+
     for _ in range(1000):
         action = a.play(state)
         print(action, state)
@@ -255,4 +265,5 @@ if __name__ == "__main__":
             break
     print("Fin - testing")
     e.close()
+
 
